@@ -16,53 +16,50 @@ struct bound_data check_bound(int value, int arr[], unsigned int length) {
     res.is_upperbound = true;
     res.is_lowerbound = true;
     res.exists = false;
+    res.where = 0;
 
-    for(unsigned int i = 0; i < length; i++){
-	if(arr[i] < value){
-		res.is_lowerbound = false;
-	}else if(arr[i] > value){
-		res.is_upperbound = false;
-	}else{
-		res.exists = true;
-		res.where = i;
-	}
+    for(unsigned int i = 0u; i < length; i++)
+    {
+	    res.is_lowerbound = res.is_lowerbound && (value <= arr[i]);
+	    res.is_upperbound = res.is_upperbound && (value >= arr[i]);
+	    
+        if(arr[i] == value)
+        {
+            res.exists = true;
+            res.where = i;
+	    }
     }
+
     return res;
 }
 
-int main(void) {
-    int a[ARRAY_SIZE] = {0, -1, 9, 4};
-    int value=9;
+void ask_for_array(int arr[]){
     
-    printf("Insert the first element of the array\n");
-    scanf("%d", &a[0]);
-    printf("Insert the second element of the array\n");
-    scanf("%d", &a[1]);
-    printf("Insert the third element of the array\n");
-    scanf("%d", &a[2]);
-    printf("Insert the fourth element of the array\n");
-    scanf("%d", &a[3]);
-    printf("Insert the value to be compared\n");
-    scanf("%d", &value);
-    
-    struct bound_data result = check_bound(value, a, ARRAY_SIZE);
-    
-    if((result.is_upperbound == true) && (result.exists == false)){
-	    printf("The inserted value is a upper bound of the array.\n");
+    for(unsigned int i = 0u; i < ARRAY_SIZE; i++)
+    {
+        printf("Insert the %u° element of the array:\n", i+1);
+        scanf("%d", &arr[i]);
     }
-    if((result.is_upperbound == true) && (result.exists == true)){
-            printf("The inserted value is a maximum of the array and it is in the position %u.\n", result.where);
-    }
-    if((result.is_lowerbound == true) && (result.exists == false)){
-            printf("The inserted value is a lower bound of the array.\n");
-    }
-    if((result.is_lowerbound == true) && (result.exists == true)){
-            printf("The inserted value is a maximum of the array and it is in the position %u.\n", result.where);
-    }
-    if((result.is_upperbound == false) && (result.is_lowerbound == false)){
-	    printf("The inserted value is not a lower or upper bound.\n");
-    }
-
-    return EXIT_SUCCESS;
 }
 
+int main(void) {
+    int a[ARRAY_SIZE];
+    int value;
+
+    ask_for_array(a);
+    printf("Insert the value to be compared:\n");
+    scanf("%d", &value);
+
+    struct bound_data result = check_bound(value, a, ARRAY_SIZE);
+    
+    printf("The inserted value is a upper bound of the array: %s.\n", (result.is_upperbound ? "True": "False"));
+    printf("The inserted value is a lower bound of the array: %s.\n", (result.is_lowerbound ? "True": "False"));
+    printf("The inserted value is a maximum of the array: %s.\n", ((result.is_upperbound && result.exists) ? "True": "False"));
+    printf("The inserted value is a minimum of the array: %s.\n", (result.is_lowerbound && result.exists) ? "True": "False");
+
+    if(result.exists){
+        printf("The inserted value is in the position %u.\n", result.where);
+    }
+   
+    return EXIT_SUCCESS;
+}
