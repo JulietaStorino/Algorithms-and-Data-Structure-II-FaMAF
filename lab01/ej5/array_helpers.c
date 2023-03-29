@@ -1,6 +1,7 @@
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "mybool.h"
 
 #include "array_helpers.h"
 
@@ -47,4 +48,19 @@ void array_dump(int a[], unsigned int length) {
         }
         printf(" %d]\n", a[length-1]);
     }
+    if(array_is_sorted(a,length)){
+        printf("The array is sorted\n");
+    }else{
+        printf("The array is not sorted\n");
+    }
+}
+
+mybool array_is_sorted(int a[], unsigned int length){
+    mybool result = true;
+    if(length>2){
+        for(unsigned int i = 0; (i < length-1) && result; i++){
+            result = result && (a[i] <= a[i+1]);
+        }
+    }
+    return result;
 }

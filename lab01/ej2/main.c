@@ -8,17 +8,25 @@
 #define MAX_SIZE 100000
 
 
-unsigned int array_from_file(int array[],
+unsigned int array_from_stdin(int array[],
                              unsigned int max_size) {
 
     unsigned int length;
     printf("Insert the length of the array:\n");
-    fscanf(stdin, "%u", &length);
+    int assert = fscanf(stdin, "%u", &length);
+    if (assert != 1){
+                printf("The length needs to be a unsigned integer.\n");
+                exit(EXIT_FAILURE);
+            }
 
     if(length <= max_size){
         for(unsigned int i = 0; i < length; i++ ){
             printf("Insert the %u° element of the array:\n", i+1);
-            fscanf(stdin,"%d", &array[i]);
+            assert = fscanf(stdin,"%d", &array[i]);
+            if (assert != 1){
+                printf("The element needs to be a integer.\n");
+                exit(EXIT_FAILURE);
+            }
         }
     } else {
         printf("The size of the array is greater than allowed.\n");
@@ -45,7 +53,7 @@ int main() {
     int array[MAX_SIZE];
     
     /* ask for the length and the elements of the array */
-    unsigned int length = array_from_file(array, MAX_SIZE);
+    unsigned int length = array_from_stdin(array, MAX_SIZE);
     
     /*dumping the array*/
     array_dump(array, length);
