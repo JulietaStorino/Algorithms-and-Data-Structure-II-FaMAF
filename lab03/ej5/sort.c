@@ -23,6 +23,12 @@ bool array_is_sorted(player_t atp[], unsigned int length) {
     return (i == length);
 }
 
+static void swap(player_t a[], unsigned int fposition, unsigned int sposition) {
+    player_t aux = a[fposition];
+    a[fposition] = a[sposition];
+    a[sposition] = aux;
+}
+
 static unsigned int partition(player_t a[], unsigned int izq, unsigned int der) {
     unsigned int ppiv = izq;
     unsigned int i = izq + 1;
@@ -53,10 +59,4 @@ static void quick_sort_rec(player_t a[], unsigned int izq, unsigned int der) {
 
 void sort(player_t a[], unsigned int length) {
     quick_sort_rec(a, 0u, (length == 0u) ? 0u : length - 1u);
-}
-
-static void swap(player_t a[], unsigned int fposition, unsigned int sposition) {
-    player_t aux = a[fposition];
-    a[fposition] = a[sposition];
-    a[sposition] = aux;
 }
