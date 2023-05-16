@@ -1,5 +1,6 @@
 #include <assert.h>
 #include <stdbool.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 #include "list.h"
@@ -14,6 +15,7 @@ void list_add(list_elem e, list l){
     list new = malloc(sizeof(struct st_list));
     new->elem = e;
     new->next = l;
+    printf("New element created: (%d, %p)=(%d, %p)\n", e, l, new->elem, new->next);
 }
 
 bool list_is_empty(list l){

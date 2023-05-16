@@ -44,6 +44,7 @@ float average(list l) {
     }
     list_destroy(laux);
     r /= largo;
+    printf("average: %f\n", r);
 
     return r;
 }
