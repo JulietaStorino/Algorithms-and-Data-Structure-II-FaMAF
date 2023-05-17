@@ -5,10 +5,12 @@
 
 typedef int list_elem;
 
-typedef struct st_list{
+typedef struct st_list *list;
+
+struct st_list{
     list_elem elem;
-    struct st_list *next;
-} *list;
+    list next;
+};
 
 list list_empty(void);
 /*
@@ -16,16 +18,16 @@ list list_empty(void);
  *
  * l = empty();
  *
- * POS: {p --> NULL}
+ * POS: {l --> NULL}
  */
 
-void list_add(list_elem e, list l);
+list list_add(list_elem e, list l);
 /*
  * DESC: Adds an element to the beginning of the list
  *
  * l = add(e, l);
  *
- * POS: {p --> list l}
+ * POS: {l --> list}
  */
 
 bool list_is_empty(list l);
@@ -44,22 +46,22 @@ list_elem list_head(list l);
  * PRE: {not is_empty(l)}
  */
 
-void list_tail(list l);
+list list_tail(list l);
 /*
  * DESC: Delete the first element of the list
  *
- * tail(l);
+ * l = tail(l);
  *
  * PRE: {not is_empty(l)}
  */
 
-void list_addr(list l, list_elem e);
+list list_addr(list l, list_elem e);
 /*
  * DESC: Adds an element to the ending of the list
  *
  * l = addr(e, l);
  *
- * POS: {p --> list l}
+ * POS: {l --> list}
  */
 
 unsigned int list_length(list l);
@@ -75,7 +77,7 @@ list list_copy(list l);
  *
  * copy = copy(l);
  *
- * POS: {p == l}
+ * POS: {copy == l}
  */
 
 void list_destroy(list l);
@@ -84,8 +86,8 @@ void list_destroy(list l);
  *
  * destroy(l);
  *
- * PRE: {p --> list l}
- * POS: {p --> NULL}
+ * PRE: {l --> list}
+ * POS: {l --> NULL}
  */
 
 #endif

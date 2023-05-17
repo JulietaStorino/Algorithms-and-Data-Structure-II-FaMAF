@@ -6,16 +6,15 @@
 #include "list.h"
 
 list list_empty(void){
-    list l = NULL;
-
-    return l;
+    return NULL;
 }
 
-void list_add(list_elem e, list l){
+list list_add(list_elem e, list l){
     list new = malloc(sizeof(struct st_list));
     new->elem = e;
     new->next = l;
-    printf("New element created: (%d, %p)=(%d, %p)\n", e, l, new->elem, new->next);
+    l = new;
+    return l;
 }
 
 bool list_is_empty(list l){
@@ -27,15 +26,15 @@ list_elem list_head(list l){
     return l->elem;
 }
 
-void list_tail(list l){
+list list_tail(list l){
     assert(!list_is_empty(l));
     list p = l;
     l = l->next;
     free(p);
-    p = NULL;
+    return l;
 }
 
-void list_addr(list l, list_elem e){
+list list_addr(list l, list_elem e){
     list p, q;
     q = malloc(sizeof(struct st_list));
     q->elem = e;
@@ -49,6 +48,7 @@ void list_addr(list l, list_elem e){
     } else {
         l = q;
     }
+    return l;
 }
 
 unsigned int list_length(list l){
@@ -62,9 +62,22 @@ unsigned int list_length(list l){
 }
 
 list list_copy(list l){
+    if (l == NULL) {
+        return NULL;
+    }
     list copy = malloc(sizeof(struct st_list));
-    copy = l;
-
+    copy->elem = l->elem;
+    copy->next = NULL;
+    list copy_current = copy;
+    list l_current = l->next;
+    while (l_current != NULL) {
+        list new_node = malloc(sizeof(struct st_list));
+        new_node->elem = l_current->elem;
+        new_node->next = NULL;
+        copy_current->next = new_node;
+        copy_current = new_node;
+        l_current = l_current->next;
+    }
     return copy;
 }
 
@@ -76,12 +89,7 @@ void list_destroy(list l){
             l = l->next;
             free(p);
         }
-        free (l);
+        free(l);
         l = NULL;
     }
 }
-
-
-
-
-

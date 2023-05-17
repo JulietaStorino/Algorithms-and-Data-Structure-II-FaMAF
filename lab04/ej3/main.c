@@ -33,18 +33,20 @@ char *parse_filepath(int argc, char *argv[]) {
 
 
 float average(list l) {
-    unsigned int largo = list_length(l);
     float elem, r = 0.0;
+    unsigned int largo = 0u;
     list laux = list_copy(l);
 
     while(!list_is_empty(laux)){
         elem = list_head(laux);
+        ++largo;
         r += elem;
-        list_tail(laux);
+        laux = list_tail(laux);
     }
     list_destroy(laux);
-    r /= largo;
-    printf("average: %f\n", r);
+    if(largo != 0u){
+        r = r / largo;
+    }
 
     return r;
 }
@@ -52,7 +54,7 @@ float average(list l) {
 list array_to_list(int array[], unsigned int length) {
     list ret = list_empty();
     for (unsigned int i = 0u; i < length; ++i) {
-        list_add(array[i], ret);
+        ret = list_add(array[i], ret);
     }
     
     return ret;
