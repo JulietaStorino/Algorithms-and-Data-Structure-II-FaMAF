@@ -27,9 +27,10 @@ create_node(queue_elem e) {
 
 static struct s_node *
 destroy_node(struct s_node *node) {
-    node->next=NULL;
+    assert(node != NULL);
     free(node);
     node=NULL;
+    assert(node == NULL);
     return node;
 }
 
@@ -41,12 +42,10 @@ invrep(queue q) {
 
 queue queue_empty(void) {
     queue q=NULL;
-    
     q = malloc(sizeof(struct s_queue));
     q->first = NULL;
     q->last = NULL;
-    q->size = 0;
-
+    q->size = 0u;
     assert(invrep(q) && queue_is_empty(q));
     return q; 
 }
@@ -80,7 +79,6 @@ queue_elem queue_first(queue q) {
 }
 unsigned int queue_size(queue q) {
     assert(invrep(q));
-
     return q->size;
 }
 
@@ -91,7 +89,6 @@ queue queue_dequeue(queue q) {
     killme = destroy_node(killme);
     assert(invrep(q));
     return q;
-
 }
 
 queue queue_disscard(queue q,unsigned int n){
@@ -136,9 +133,8 @@ queue queue_destroy(queue q) {
     assert(invrep(q));
     struct s_node *node=q->first;
     while (node != NULL) {
-        struct s_node *killme=node;
-        node = node->next;
-        killme = destroy_node(killme);
+        q = queue_dequeue(q);
+        node = q->first;
     }
     free(q);
     q = NULL;
