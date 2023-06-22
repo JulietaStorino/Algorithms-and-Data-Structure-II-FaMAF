@@ -62,8 +62,8 @@ bool is_valid_option(char option) {
 
     result = (option == ADD || option == REMOVE ||
               option == DUMP || option == EMPTY || option == LOAD ||
-              option == SEARCH || option == SHOW || option == SIZE ||
-              option == QUIT);
+              option == SEARCH || option == REPLACE || option == SHOW ||
+              option == SIZE || option == QUIT);
 
     return (result);
 }
@@ -172,37 +172,37 @@ int main(void) {
     do {
         option = print_menu();
         switch (option) {
-            case ADD:
-
-                break;
-            case REMOVE:
-
-                break;
-            case REPLACE:
-
-                break;
-            case DUMP:
-
-                break;
-            case EMPTY:
-
-                break;
-            case LOAD:
-
-                break;
-            case SEARCH:
-
-                break;
-            case SHOW:
-
-                break;
-            case SIZE:
-
-                break;
-            case QUIT:
-                current = dict_destroy(current);
-                printf(RESULT_PREFIX "Exiting.\n");
-                return (EXIT_SUCCESS);
+    case ADD:
+        current = on_add(current);
+        break;
+    case REMOVE:
+        current = on_remove(current);
+        break;
+    case DUMP:
+        on_dump(current);
+        break;
+    case EMPTY:
+        current = on_empty(current);
+        break;
+    case LOAD:
+        current = on_load(current);
+        break;
+    case SEARCH:
+        on_search(current);
+        break;
+    case REPLACE:
+        current = on_replace(current);
+        break;
+    case SHOW:
+        dict_dump(current, stdout);
+        break;
+    case SIZE:
+        on_size(current);
+        break;
+    case QUIT:
+        current = dict_destroy(current);
+        printf(RESULT_PREFIX "Exiting.\n");
+        return (EXIT_SUCCESS);
             default:
                 printf("\n\"%c\" is invalid. Please choose a valid "
                        "option.\n\n", option);
