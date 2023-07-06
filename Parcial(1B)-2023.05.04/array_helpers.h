@@ -4,15 +4,13 @@
 */
 #ifndef _ARRAY_HELPERS_H
 #define _ARRAY_HELPERS_H
-
 #include <stdbool.h>
 #include "bakery_product.h"
 
 #define CITIES 5
 #define SEASONS 2
 
-typedef BakeryProduct BakeryProductTable [CITIES][SEASONS];
-
+typedef BakeryProduct BakeryProductTable[CITIES][SEASONS];
 
 /**
  * @brief Write the content of the array 'a' into stdout.
@@ -25,7 +23,6 @@ void array_dump(BakeryProductTable a);
  * @param[in] a array with data
  */
 unsigned int worst_profit(BakeryProductTable a);
-
 
 /**
  * @brief reads an array of prices information from file
@@ -43,6 +40,7 @@ unsigned int worst_profit(BakeryProductTable a);
  * @param a array which will contain read file
  * @param filepath file with prices data
  */
+
 void array_from_file(BakeryProductTable a, const char *filepath);
 
 #endif

@@ -18,9 +18,36 @@ static bool elem_less(abb_elem a, abb_elem b) {
     return a < b;
 }
 
+static bool is_a_leaf(abb tree) {
+    return tree->left == NULL && tree->right == NULL;
+}
+
+//Obtains the father of the given node 
+static abb abb_find(abb tree, abb_elem e) {
+    abb previous_node = tree;
+    abb current_node = tree;
+    while(current_node != NULL & !elem_eq(e, current_node->elem)) {
+        previous_node = current_node;
+        if(elem_less(e, current_node->elem)) {
+            current_node = current_node->left;
+        } else {
+            current_node = current_node->right;
+        }
+    }
+    return previous_node;   
+}
+
+static abb abb_create_node(abb_elem e) {
+    abb new_node = (abb)malloc(sizeof(struct _s_abb));
+    new_node->elem = e;
+    new_node->left = NULL;
+    new_node->right = NULL;
+    return new_node;
+}
+
 static bool invrep(abb tree) {
     bool result = true;
-    if(tree != NULL && (tree->left != NULL || tree->right != NULL)) {
+    if(tree != NULL && !is_a_leaf(tree)) {
         if(tree->left != NULL && tree->right == NULL) {
             result = elem_less(tree->left->elem, tree->elem) && invrep(tree->left);
         } else if(tree->left == NULL && tree->right != NULL) {
@@ -36,31 +63,6 @@ abb abb_empty(void) {
     abb tree = NULL;
     assert(invrep(tree) && abb_is_empty(tree));
     return tree;
-}
-
-//Obtains the father of the given node 
-static abb abb_find(abb tree, abb_elem e) {
-    abb previous_node = tree;
-    abb current_node = tree;
-    while(current_node != NULL) {
-        previous_node = current_node;
-        if(elem_eq(e, current_node->elem)) {
-            break;
-        } else if(elem_less(e, current_node->elem)) {
-            current_node = current_node->left;
-        } else {
-            current_node = current_node->right;
-        }
-    }
-    return previous_node;   
-}
-
-static abb abb_create_node(abb_elem e) {
-    abb new_node = (abb)malloc(sizeof(struct _s_abb));
-    new_node->elem = e;
-    new_node->left = NULL;
-    new_node->right = NULL;
-    return new_node;
 }
 
 abb abb_add(abb tree, abb_elem e) {
@@ -90,16 +92,14 @@ bool abb_is_empty(abb tree) {
 bool abb_exists(abb tree, abb_elem e) {
     assert(invrep(tree));
     bool exists = false;
-    if(tree != NULL){
-        abb current_node = tree;
-        while(!exists && current_node != NULL) {
-            if(elem_eq(e, current_node->elem)) {
-                exists = true;
-            } else if(elem_less(e, current_node->elem)) {
-                current_node = current_node->left;
-            } else {
-                current_node = current_node->right;
-            }
+    abb current_node = tree;
+    while(!exists && current_node != NULL) {
+        if(elem_eq(e, current_node->elem)) {
+            exists = true;
+        } else if(elem_less(e, current_node->elem)) {
+            current_node = current_node->left;
+        } else {
+            current_node = current_node->right;
         }
     }
     return exists;
@@ -191,11 +191,10 @@ void abb_dump(abb tree) {
 
 abb abb_destroy(abb tree) {
     if(tree != NULL) {
-        abb left = tree->left;
-        abb right = tree->right;
+        tree->left = abb_destroy(tree->left);
+        tree->right = abb_destroy(tree->right);
         free(tree);
-        abb_destroy(left);
-        abb_destroy(right);
+        tree = NULL;
     }
-    return tree;
+    return NULL;
 }

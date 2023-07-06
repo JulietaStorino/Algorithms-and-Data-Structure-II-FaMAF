@@ -129,4 +129,3 @@ pstack pstack_destroy(pstack s) {
     assert(s == NULL);
     return s;
 }
-

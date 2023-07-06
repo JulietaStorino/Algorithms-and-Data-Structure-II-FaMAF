@@ -1,8 +1,8 @@
 CC = gcc
 CFLAGS = -Wall -Werror -Wextra -pedantic -std=c99 -g
-SOURCES = dict.c dict_helpers.c helpers.c main.c string.c
+SOURCES = array_helpers.c bakery_product.c main.c
 OBJECTS = $(SOURCES:.c=.o)
-TARGET = dictionary
+TARGET = main
 
 .PHONY: clean
 

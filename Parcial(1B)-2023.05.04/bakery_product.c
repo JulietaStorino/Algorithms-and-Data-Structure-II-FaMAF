@@ -12,14 +12,17 @@ BakeryProduct bakery_product_from_file(FILE* file)
     BakeryProduct product;
 
     if(feof(file)){
-    printf("Invalid array.¸\n");
+    printf("Invalid array.\n");
     exit(EXIT_FAILURE);
     }
-    int errorvalue = fscanf(file, "%u (%u,%u) (%u,%u) (%u,%u)\n", &product.sale_value, &product.yeast_cant, &product.yeast_price, &product.butter_cant, &product.butter_price, &product.flour_cant, &product.flour_price);
-    if(errorvalue != AMOUNT_OF_PRODUCT_VARS){
-	    printf("Error, invalid file.\n");
-            exit(EXIT_FAILURE);
+    int res = fscanf(file, EXPECTED_PRODUCT_FILE_FORMAT, &product.flour_cant, &product.flour_price,
+                                                         &product.yeast_cant, &product.yeast_price,
+                                                         &product.butter_cant, &product.butter_price,
+                                                         &product.sale_value);
+    if (res != AMOUNT_OF_PRODUCT_VARS)
+    {
+        fprintf(stderr, "Invalid product data.\n");
+        exit(EXIT_FAILURE);
     }
-    
     return product;
 }

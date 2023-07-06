@@ -14,6 +14,15 @@ static const char* CITY_NAMES[CITIES] = {
     "Cordoba", "Rosario", "Posadas", "Tilcara", "Bariloche"};
 static const char* SEASON_NAMES[SEASONS] = {"low", "high"};
 
+static unsigned int profit(BakeryProductTable a, unsigned int city, unsigned int season){
+    BakeryProduct local = a[city][season];
+	unsigned int profit = (local.flour_cant * local.flour_price) + 
+                          (local.yeast_cant * local.yeast_price) +
+                          (local.butter_cant * local.butter_price);
+    profit = local.sale_value - profit;
+    return profit;
+}
+
 void array_dump(BakeryProductTable a)
 {
     for (unsigned int city = 0u; city < CITIES; ++city)
@@ -33,13 +42,12 @@ void array_dump(BakeryProductTable a)
 unsigned int best_profit(BakeryProductTable a)
 {
     unsigned int max_profit = 0u;
+    unsigned int local_profit;
     for(unsigned int city = 0u; city < CITIES; city++){
 		for(unsigned int season = 0u; season < SEASONS; season++){
-			BakeryProduct product = a[city][season];
-			unsigned int profit = (product.flour_cant * product.flour_price)+(product.yeast_cant * product.yeast_price)+(product.butter_cant * product.butter_price);
-            profit = product.sale_value - profit;
-			if(profit > max_profit){
-				max_profit = profit;
+			local_profit = profit(a, city, season);
+			if(local_profit > max_profit){
+				max_profit = local_profit;
 			}
         }
     }

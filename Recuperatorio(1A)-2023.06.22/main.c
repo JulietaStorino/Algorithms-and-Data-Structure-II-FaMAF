@@ -15,20 +15,19 @@
  * @brief print usage help
  * @param[in] program_name Executable name
  */
-void print_help(char *program_name)
-{
+void print_help(char *program_name) {
     /* Print the usage help of this program. */
-    printf(
-        "Usage: %s <input file path>\n\n"
-        "Load bakery product data from a given file in disk.\n"
-        "\n"
-        "The input file must exist in disk and every line in it must have the following format:\n\n"
-        "##<uint>\?\?<uint> (<uint>,<uint>) (<uint>,<uint>) (<uint>,<uint>) <uint> \n\n"
-        "where each value represent: \n\n"
-        "##<city_code>\?\?<season> (<flour_cant>,<flour_price>) (<yeast_cant>,<yeast_price>) (<butter_cant>,<butter_price>) <sales_value> \n\n"
-        "Those elements must be integers and will be copied into the multidimensional integer array 'a'.\n"
-        "\n\n",
-        program_name);
+    printf("Usage: %s <input file path>\n\n"
+           "Load train wagon data from a given file in disk.\n"
+           "\n"
+           "The input file must exist in disk and the first line must have the"
+           "following format:\n\n"
+           "[<train-code>] #<total-number-of-wagons> <total-weight>kg \n\n"
+           "then, the following lines must have format:\n\n"
+           "<wagon number> <cargo type> <kg> <cargo type> <kg> \n\n"
+           "Those elements will be copied into the integer array 't'.\n"
+           "\n\n",
+           program_name);
 }
 
 /**
@@ -39,13 +38,11 @@ void print_help(char *program_name)
  *
  * @return An string containing read filepath
  */
-char *parse_filepath(int argc, char *argv[])
-{
+char *parse_filepath(int argc, char *argv[]) {
     /* Parse the filepath given by command line argument. */
     char *result = NULL;
 
-    if (argc < 2)
-    {
+    if (argc < 2) {
         print_help(argv[0]);
         exit(EXIT_FAILURE);
     }
@@ -63,24 +60,28 @@ char *parse_filepath(int argc, char *argv[])
  *
  * @return EXIT_SUCCESS when programs executes correctly, EXIT_FAILURE otherwise
  */
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
     char *filepath = NULL;
 
     /* parse the filepath given in command line arguments */
     filepath = parse_filepath(argc, argv);
 
     /* create an array with the type of flight */
-    BakeryProductTable array;
+    Train array;
+    unsigned int trainSize;
 
     /* parse the file to fill the array and obtain the actual length */
-    array_from_file(array, filepath);
+    array_from_file(array, &trainSize, filepath);
 
     /* show the data on the screen */
-    array_dump(array);
+    array_dump(array, trainSize);
 
-    unsigned int worstprofit = worst_profit(array);
-    printf("\nWorst profit: %d\n", worstprofit);
+    /* Separate wagon's data output from discard information */
+    printf("\n\n");
+
+    /* Show message indicating if has to discard wagons */
+    bool discard = has_to_discard_wagons(array, trainSize);
+    printf("\n%s to discard wagons.\n", discard?"Has":"Has not");
 
     return (EXIT_SUCCESS);
 }

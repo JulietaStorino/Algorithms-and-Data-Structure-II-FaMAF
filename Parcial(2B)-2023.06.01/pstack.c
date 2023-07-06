@@ -109,7 +109,7 @@ pstack pstack_push(pstack s,
 
 bool pstack_is_empty(pstack s) 
 {
-    return s->size == 0;
+    return s->size == 0u;
 }
 
 pstack_elem pstack_top(pstack s) 
@@ -138,30 +138,19 @@ float pstack_top_priority(pstack s)
 
 unsigned int pstack_size(pstack s) 
 {
-    return s->size;
-}
-
-static pstack pstack_reversed_copy(pstack s)
-{
     assert(invrep(s));
-    pstack copy = NULL;
-    struct s_node *node = s->front;
-    while(node != NULL){
-        pstack_push(copy, node->elem, node->average_grade, node->approved_courses);
-        node = node->next;
-    }
-    assert(invrep(copy));
-    return copy;
+    return s->size;
 }
 
 pstack pstack_copy(pstack s)
 {
     assert(invrep(s));
-    pstack aux = pstack_empty();
     pstack copy = pstack_empty();
-    aux = pstack_reversed_copy(s);
-    copy = pstack_reversed_copy(aux);
-    pstack_destroy(aux);
+    struct s_node *node = s->front;
+    while (node != NULL) {
+        copy = pstack_push(copy, node->elem, node->average_grade, node->approved_courses);
+        node = node->next;
+    }
     assert(invrep(copy));
     return copy;
 }

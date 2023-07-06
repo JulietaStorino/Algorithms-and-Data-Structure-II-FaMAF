@@ -13,8 +13,7 @@ struct s_card {
 static bool
 invrep(card_t c) {
     // Invariante de representación
-    bool valid=false;
-    valid = c != NULL;
+    bool valid = c != NULL;
     if((c->type) == normal){
         valid = ((c->num) <= 9);
     }else{
@@ -72,19 +71,13 @@ card_samenum(card_t c1, card_t c2) {
 
 bool
 card_compatible(card_t new_card, card_t pile_card) {
-    bool compatible=false; 
     assert(invrep(new_card) && invrep(pile_card));
-    if(card_samecolor(new_card, pile_card) || (card_get_type(new_card) == change_color)){
-        compatible=true;
-    }
-    else if ((card_get_type(pile_card) == card_get_type(new_card)) && (card_get_type(new_card) == skip))
-    {
-        compatible=true;
-    }
-    else if ((card_get_type(pile_card) == card_get_type(new_card)) && (card_get_type(new_card) == normal))
-    {
-        compatible = card_samenum(new_card, pile_card);
-    }
+    bool compatible;
+    
+    compatible = card_get_type(new_card) == change_color;
+    compatible = compatible || (card_get_type(new_card) == skip && (card_get_type(pile_card) == skip || card_samecolor(pile_card, new_card)));
+    compatible = compatible || (card_get_type(new_card) == normal && ((card_samenum(pile_card, new_card) &&  card_get_type(pile_card) == normal) || card_samecolor(pile_card, new_card)));
+
     return compatible;
 }
 

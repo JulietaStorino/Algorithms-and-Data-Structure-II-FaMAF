@@ -1,8 +1,8 @@
 CC = gcc
 CFLAGS = -Wall -Werror -Wextra -pedantic -std=c99 -g
-SOURCES = pqueue.c main.c
+SOURCES = array_helpers.c bakery_product.c main.c
 OBJECTS = $(SOURCES:.c=.o)
-TARGET = dispatch_patients
+TARGET = main
 
 .PHONY: clean
 
